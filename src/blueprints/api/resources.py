@@ -98,21 +98,24 @@ class ProdutorAPI(MethodView):
     def get(self, **kwargs):
         cpf = request.args.get("cpf", None)
         if cpf:
-            produtores = ProdutorRural.query.filter_by(cpf=cpf).all()
+            produtores = ProdutorRural.query.filter(
+                ProdutorRural.cpf.like("%" + cpf + "%")
+            ).all()
         else:
             produtores = ProdutorRural.query.all()
 
-        payload = {
-            "produtores": [
-                {
-                    "nome": produtor.nome,
-                    "cpf": produtor.cpf,
-                    "email": produtor.email,
-                }
-                for produtor in produtores
-            ]
-        }
-        return json_response(payload=payload)
+        return json_response(
+            payload={
+                "produtores": [
+                    {
+                        "nome": produtor.nome,
+                        "cpf": produtor.cpf,
+                        "email": produtor.email,
+                    }
+                    for produtor in produtores
+                ]
+            }
+        )
 
     @token_required
     def post(self, **kwargs):
