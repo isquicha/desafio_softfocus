@@ -33,7 +33,7 @@ extensions = {
 }
 
 blueprints = {
-    "DEFAULT": [],
+    "DEFAULT": ["api"],
     "DEVELOPMENT": [],
     "TESTING": [],
     "PRODUCTION": [],
