@@ -3,7 +3,7 @@ from flask.views import MethodView
 from sqlalchemy.exc import IntegrityError
 
 from src.utils import json_response
-from src.models import ProdutorRural
+from src.models import ProdutorRural, Lavoura
 from src.extensions.database import db
 from src.extensions.authentication import (
     create_user,
@@ -236,3 +236,20 @@ class ProdutorAPI(MethodView):
         except Exception:
             return json_response(status_code=500, message="Could not delete")
         return json_response(200)
+
+
+class LavouraAPI(MethodView):
+    @token_required
+    def get(self, **kwargs):
+        return json_response(
+            payload={
+                "lavouras": [
+                    {
+                        "latitude": lavoura.latitude,
+                        "longitude": lavoura.longitude,
+                        "tipo": lavoura.tipo,
+                    }
+                    for lavoura in Lavoura.query.all()
+                ]
+            }
+        )
