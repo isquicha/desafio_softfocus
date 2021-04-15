@@ -72,8 +72,8 @@ http_status_codes = {
 def json_response(
     status_code: str = "200",
     message: str = None,
-    path: str = request.path,
-    method: str = request.method,
+    path: str = None,
+    method: str = None,
     payload: dict = None,
 ) -> dict:
     try:
@@ -83,6 +83,10 @@ def json_response(
         message = "Server has tried to return an invalid status!"
 
     status_code = str(status_code)
+    if not path:
+        path = request.path
+    if not method:
+        method = request.method
     response = {
         "timestamp": asctime(gmtime()),
         "status": status_code,
