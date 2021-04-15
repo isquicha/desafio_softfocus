@@ -4,7 +4,7 @@ from flask.views import MethodView
 from src.utils import json_response
 from src.extensions.authentication import (
     create_user,
-    generate_login_token,
+    generate_token,
     token_required,
     AlreadyRegisteredError,
     InvalidUserError,
@@ -75,7 +75,7 @@ class UserTokenAPI(MethodView):
             )
 
         try:
-            token = generate_login_token(username=username, password=password)
+            token = generate_token(username=username, password=password)
         except (InvalidUserError, IncorrectPasswordError):
             return json_response(
                 # ! Don't say to hackers if it is the username that doesn't
