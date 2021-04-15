@@ -13,5 +13,7 @@ def init_app(bp: Blueprint):
         "/user/token/", view_func=user_token_view, methods=["POST"]
     )
     bp.add_url_rule(
-        "/produtores/", view_func=produtor_view, methods=["GET", "POST"]
+        "/produtores/",
+        view_func=produtor_view,
+        methods=["GET", "POST", "PATCH"],
     )

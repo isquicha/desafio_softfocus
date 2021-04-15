@@ -151,3 +151,56 @@ class ProdutorAPI(MethodView):
             return json_response(status_code=500, message="Could not create")
 
         return json_response(201)
+
+    @token_required
+    def patch(self, **kwargs):
+        body = request.get_json()
+        if body is None:
+            return json_response(
+                status_code=400, message="You must provide a json body"
+            )
+
+        novo_nome = body.get("novo_nome", None)
+        novo_email = body.get("novo_email", None)
+        novo_cpf = body.get("novo_cpf", None)
+        cpf = body.get("cpf", None)
+
+        if cpf is None:
+            return json_response(
+                status_code=400, message="Field 'cpf' must not be empty"
+            )
+
+        if novo_nome is None and novo_email is None and novo_cpf is None:
+            return json_response(
+                status_code=400,
+                message=(
+                    "You must provide at least one of those fields:"
+                    " 'novo_nome', 'novo_email', 'novo_cpf'"
+                ),
+            )
+
+        produtor = ProdutorRural.query.filter_by(cpf=cpf).first()
+
+        if not produtor:
+            return json_response(
+                status_code=404,
+                message=f"Produtor with cpf {cpf} was not found",
+            )
+        if novo_cpf:
+            produtor.cpf = novo_cpf
+        if novo_email:
+            produtor.email = novo_email
+        if novo_nome:
+            produtor.nome = novo_nome
+
+        try:
+            db.session.add(produtor)
+            db.session.commit()
+        except IntegrityError:
+            return json_response(
+                status_code=400, message="CPF already registered"
+            )
+        except Exception:
+            return json_response(status_code=500, message="Could not update")
+
+        return json_response(200)
