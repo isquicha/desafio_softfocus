@@ -2,6 +2,7 @@ from flask import request
 from flask.views import MethodView
 
 from src.utils import json_response
+from src.models import ProdutorRural
 from src.extensions.authentication import (
     create_user,
     generate_token,
@@ -88,3 +89,25 @@ class UserTokenAPI(MethodView):
                 message="Token successful generated",
                 payload={"access_token": token},
             )
+
+
+class ProdutorAPI(MethodView):
+    @token_required
+    def get(self, **kwargs):
+        cpf = request.args.get("cpf", None)
+        if cpf:
+            produtores = ProdutorRural.query.filter_by(cpf=cpf).all()
+        else:
+            produtores = ProdutorRural.query.all()
+
+        payload = {
+            "produtores": [
+                {
+                    "nome": produtor.nome,
+                    "cpf": produtor.cpf,
+                    "email": produtor.email,
+                }
+                for produtor in produtores
+            ]
+        }
+        return json_response(payload=payload)
