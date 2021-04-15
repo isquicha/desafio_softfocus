@@ -75,7 +75,43 @@ def json_response(
     path: str = None,
     method: str = None,
     payload: dict = None,
-) -> dict:
+) -> tuple(dict, int):
+    """Generates a well formated json response
+
+    [extended_summary]
+
+    Parameters
+    ----------
+    status_code : str | int, optional
+        HTTP status code, by default "200"
+    message : str, optional
+        Custom message for the response body, by default None
+    path : str, optional
+        The path of the request, by default flask.request.path
+    method : str, optional
+        The method of the request, by default flask.request.method
+    payload : dict, optional
+        Response data, by default None
+
+    Returns
+    -------
+    dict
+        Flask json response : tuple(dict, int)
+        (
+            {
+                "status",
+                "status_message",
+                "timestamp",
+                "method",
+                "path",
+                "message?",
+                "payload?"
+            },
+            status_code
+        )
+
+
+    """
     try:
         int(status_code)
     except ValueError:
