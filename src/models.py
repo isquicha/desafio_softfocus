@@ -18,7 +18,7 @@ class ProdutorRural(db.Model):
     id = Column(Integer, primary_key=True)
     nome = Column(String(STRING_BASE_LENGTH), nullable=False)
     email = Column(String(STRING_BASE_LENGTH), nullable=False)
-    cpf = Column(String(9), nullable=False, unique=True)
+    cpf = Column(String(11), nullable=False, unique=True)
 
     def __repr__(self) -> str:
         return "<ProdutorRural %r>" % self.nome
