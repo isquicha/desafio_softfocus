@@ -75,7 +75,7 @@ def json_response(
     path: str = None,
     method: str = None,
     payload: dict = None,
-) -> tuple(dict, int):
+) -> tuple[dict, int]:
     """Generates a well formated json response
 
     [extended_summary]
