@@ -26,7 +26,7 @@ config = {
 }
 
 extensions = {
-    "DEFAULT": ["database", "authentication"],
+    "DEFAULT": ["database", "authentication", "errors"],
     "DEVELOPMENT": [],
     "TESTING": [],
     "PRODUCTION": [],
