@@ -1,8 +1,10 @@
 from flask import request
 from flask.views import MethodView
+from sqlalchemy.exc import IntegrityError
 
 from src.utils import json_response
 from src.models import ProdutorRural
+from src.extensions.database import db
 from src.extensions.authentication import (
     create_user,
     generate_token,
@@ -111,3 +113,41 @@ class ProdutorAPI(MethodView):
             ]
         }
         return json_response(payload=payload)
+
+    @token_required
+    def post(self, **kwargs):
+        body = request.get_json()
+        if body is None:
+            return json_response(
+                status_code=400, message="You must provide a json body"
+            )
+
+        nome = body.get("nome", None)
+        email = body.get("email", None)
+        cpf = body.get("cpf", None)
+
+        if nome is None:
+            return json_response(
+                status_code=400, message="Field 'nome' must not be empty"
+            )
+        if email is None:
+            return json_response(
+                status_code=400, message="Field 'email' must not be empty"
+            )
+        if cpf is None:
+            return json_response(
+                status_code=400, message="Field 'cpf' must not be empty"
+            )
+
+        try:
+            produtor = ProdutorRural(nome=nome, email=email, cpf=cpf)
+            db.session.add(produtor)
+            db.session.commit()
+        except IntegrityError:
+            return json_response(
+                status_code=400, message="CPF already registered"
+            )
+        except Exception:
+            return json_response(status_code=500, message="Could not create")
+
+        return json_response(201)
