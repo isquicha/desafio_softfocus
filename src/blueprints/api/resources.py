@@ -204,3 +204,32 @@ class ProdutorAPI(MethodView):
             return json_response(status_code=500, message="Could not update")
 
         return json_response(200)
+
+    @token_required
+    def delete(self, **kwargs):
+        body = request.get_json()
+        if body is None:
+            return json_response(
+                status_code=400, message="You must provide a json body"
+            )
+
+        cpf = body.get("cpf", None)
+
+        if cpf is None:
+            return json_response(
+                status_code=400, message="Field 'cpf' must not be empty"
+            )
+
+        produtor = ProdutorRural.query.filter_by(cpf=cpf).first()
+        if not produtor:
+            return json_response(
+                status_code=404,
+                message=f"Produtor with cpf {cpf} was not found",
+            )
+
+        try:
+            db.session.delete(produtor)
+            db.session.commit()
+        except Exception:
+            return json_response(status_code=500, message="Could not delete")
+        return json_response(200)

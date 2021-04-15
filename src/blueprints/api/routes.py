@@ -15,5 +15,5 @@ def init_app(bp: Blueprint):
     bp.add_url_rule(
         "/produtores/",
         view_func=produtor_view,
-        methods=["GET", "POST", "PATCH"],
+        methods=["GET", "POST", "PATCH", "DELETE"],
     )
