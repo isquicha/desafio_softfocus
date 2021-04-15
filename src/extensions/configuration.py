@@ -11,6 +11,7 @@ config = {
         "SECRET_KEY": "from .env",
         "PASSWORD_SCHEMES": ["pbkdf2_sha512", "md5_crypt"],
         "SQLALCHEMY_DATABASE_URI": "from .env",
+        "SQLALCHEMY_TRACK_MODIFICATIONS": False,
     },
     "DEVELOPMENT": {
         "DEBUG": True,
