@@ -1,0 +1,5 @@
+Flask==1.1.2
+Flask-SQLAlchemy==2.5.1
+Flask-Migrate==2.7.0
+flask-simplelogin==0.0.7
+python-dotenv==0.17.0
