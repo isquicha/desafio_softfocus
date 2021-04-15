@@ -26,8 +26,8 @@ class ProdutorRural(db.Model):
 
 class Lavoura(db.Model):
     id = Column(Integer, primary_key=True)
-    latitude = Column(Float(precision=64), nullable=False)
-    longitude = Column(Float(precision=64), nullable=False)
+    latitude = Column(Float(precision=32), nullable=False)
+    longitude = Column(Float(precision=32), nullable=False)
     tipo = Column(String(STRING_BASE_LENGTH), nullable=False)
 
     def __repr__(self) -> str:
