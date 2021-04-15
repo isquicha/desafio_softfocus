@@ -14,5 +14,5 @@ def init_app(app: Flask):
     ----------
     app : Flask
     """
-    Migrate(app, db)
+    Migrate(app, db, directory="src/extensions/database/migrations")
     db.init_app(app)
